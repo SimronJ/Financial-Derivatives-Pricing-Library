@@ -19,7 +19,7 @@ This Java library implements numerical methods for pricing financial derivatives
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/financial-derivatives-library.git
+   git clone https://github.com/SimronJ/Financial-Derivatives-Pricing-Library
    ```
 2. Import the project into your fav Java IDE.
 3. Add the library to your project's dependencies.
