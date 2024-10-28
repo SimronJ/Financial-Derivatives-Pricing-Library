@@ -1,100 +1,132 @@
-# Financial Derivatives Pricing Library
+# Option Pricing Calculator
 
 ## Overview
-
-This Java library implements numerical methods for pricing financial derivatives, with a focus on the binomial tree model for option pricing. The implementation supports European, American, and Bermudan options with robust error handling and comprehensive testing.
+This Java project implements a binomial tree model for pricing various types of financial options. It provides accurate pricing calculations for European, American, and Bermudan options using industry-standard numerical methods.
 
 ## Features
-
-- Binomial tree implementation for option pricing
-- Support for multiple option types:
-  - European options (calls and puts)
-  - American options (calls and puts)
-  - Bermudan options (with custom exercise windows)
+- Multiple option types support:
+  - European Options (exercise at maturity only)
+  - American Options (exercise any time until maturity)
+  - Bermudan Options (exercise during specified windows)
 - Implied volatility calculations
 - Comprehensive error handling and input validation
-- Extensive test suite
+- Flexible binomial tree implementation
+- Professional-grade numerical computations
 
-## Installation
+## Technical Details
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/SimronJ/Financial-Derivatives-Pricing-Library
-   ```
-2. Import the project into your fav Java IDE.
-3. Add the library to your project's dependencies.
+### Core Components
 
-## Quick Start
+#### Market Data (`MarketData.java`)
+Handles market-related parameters:
+- Current stock price
+- Risk-free interest rate
+- Volatility
+- Time parameters
+
+#### Option Types
+- `VanillaOption.java`: Base implementation for European/American options
+- `BermudanOption.java`: Implementation for window-based exercise options
+- `Derivative.java`: Abstract base class for all derivatives
+
+#### Pricing Engine (`Library.java`)
+Implements core pricing algorithms:
+- Binomial tree model
+- Implied volatility calculator
+- Risk calculations
+
+## Usage Example
 
 ```java
 // Create market data
-MarketData mkt = new MarketData(100.0, // Current market price
-                               100.0, // Stock price
-                               0.05,  // Risk-free rate
-                               0.2,   // Volatility
-                               0.0);  // Current time
+MarketData mkt = new MarketData(
+    10.0,   // Market price
+    100.0,  // Stock price
+    0.05,   // Risk-free rate
+    0.2,    // Volatility
+    0.0     // Current time
+);
 
 // Create a European call option
-VanillaOption euroCall = new VanillaOption(100.0,  // Strike price
-                                          true,    // Is call option
-                                          false,   // Is American
-                                          1.0);    // Time to maturity
+VanillaOption euCall = new VanillaOption(
+    100.0,  // Strike price
+    true,   // Is call option
+    false,  // Is not American
+    1.0     // 1 year to maturity
+);
 
 // Price the option
-Output result = Library.binom(euroCall, mkt, 100);  // 100 time steps
-System.out.println("Option Price: " + result.FV);
+Output result = Library.binom(euCall, mkt, 50);  // 50 time steps
 ```
 
-## Usage Examples
+## Test Suite
 
-### Pricing a European Call Option
+The project includes comprehensive tests (`OptionPricingTest.java`) covering:
 
-```java
-VanillaOption euroCall = new VanillaOption(100.0, true, false, 1.0);
-Output result = Library.binom(euroCall, mkt, 100);
+1. **Vanilla Options**
+   - European calls and puts
+   - American puts
+   ```java
+   // Example output:
+   European Call:
+   └─ Parameters: Strike=100.00, Spot=100.00, Vol=20.00%
+   └─ Results: Fair Value=10.43, Fugit=1.00
+   ```
+
+2. **Bermudan Options**
+   - Window-based exercise rights
+   - Custom exercise periods
+
+3. **Edge Cases**
+   - Negative strike prices
+   - Invalid exercise windows
+   - Negative volatility
+   - Zero maturity
+   - Negative time values
+
+4. **Implied Volatility**
+   - Market price to volatility conversion
+   - Newton-Raphson iteration method
+
+## Installation and Setup
+
+1. Clone the repository:
+```bash
+git clone https://github.com/SimronJ/Financial-Derivatives-Pricing-Library/tree/main
 ```
 
-### Pricing an American Put Option
-
-```java
-VanillaOption amerPut = new VanillaOption(100.0, false, true, 1.0);
-Output result = Library.binom(amerPut, mkt, 100);
+2. Compile the Java files:
+```bash
+javac -d bin src/*.java
 ```
 
-### Calculating Implied Volatility
-
-```java
-Output impliedVol = Library.impvol(option, mkt, 100, 100, 0.0001, null);
-System.out.println("Implied Volatility: " + impliedVol.impvol);
+3. Run the tests:
+```bash
+java -cp bin OptionPricingTest
 ```
-
-## Performance Considerations
-
-- The binomial tree algorithm has complexity O(n²) where n is the number of time steps
-- Memory usage scales quadratically with the number of time steps
-- Recommended range for time steps: 50-1000 for most applications
 
 ## Dependencies
-
-- Java 8 or higher
+- Java JDK 23 or higher
 - No external libraries required
 
-## Testing
+## Mathematical Background
+The project implements the Cox-Ross-Rubinstein binomial model with:
+- Risk-neutral pricing
+- Backward induction
+- Newton's method for implied volatility
 
-Run the test suite:
-```
-java OptionPricingTest
-```
+## Error Handling
+- Input validation for all parameters
+- Comprehensive edge case handling
+- Clear error messages for debugging
 
-## License
+## Performance Considerations
+- Optimized tree building
+- Memory-efficient calculations
+- Iterative methods for large datasets
 
-This project is licensed under the MIT License - see the LICENSE file for details
+## Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Authors
-
-- Simranjeet Singh
-
-## References
-
-- Cox, J. C., Ross, S. A., & Rubinstein, M. (1979). Option Pricing: A Simplified Approach
-- Hull, J. C. Options, Futures, and Other Derivatives
+## Acknowledgments
+- Cox-Ross-Rubinstein for the binomial model framework
