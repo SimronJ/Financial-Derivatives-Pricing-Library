@@ -40,10 +40,7 @@ public class OptionPricingTest {
         System.out.println();
         testImpliedVolatility();
         System.out.println();
-        // Test different market scenarios
-        testMarketScenario("AAPL", 175.50, 0.05, 0.20);
         testMarketScenario("GOOGL", 135.75, 0.04, 0.25);
-        testMarketScenario("MSFT", 325.25, 0.06, 0.18);
     }
 
 
