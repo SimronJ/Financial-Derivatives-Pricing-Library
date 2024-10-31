@@ -39,6 +39,40 @@ public class OptionPricingTest {
         testEdgeCases();
         System.out.println();
         testImpliedVolatility();
+        System.out.println();
+        // Test different market scenarios
+        testMarketScenario("AAPL", 175.50, 0.05, 0.20);
+        testMarketScenario("GOOGL", 135.75, 0.04, 0.25);
+        testMarketScenario("MSFT", 325.25, 0.06, 0.18);
+    }
+
+
+    private static void testMarketScenario(String ticker, double price, 
+                                         double riskFreeRate, double volatility) {
+        MarketData mkt = new MarketData(
+            price * 0.1,  // market price (arbitrary for testing)
+            price,        // stock price
+            riskFreeRate, // risk-free rate
+            volatility,   // volatility
+            0.0          // current time
+        );
+
+        OptionsChart chart = new OptionsChart(
+            ticker,     // ticker symbol
+            price,      // current price
+            45.0,       // IV rank
+            0.015       // dividend yield
+        );
+
+        // Display and save to file
+        chart.displayOptionsChain(0.25, mkt); // 3-month options
+        
+        // Add delay between tests to see different timestamps
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     private static void testVanillaOptions() {
